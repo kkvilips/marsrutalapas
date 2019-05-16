@@ -1,0 +1,49 @@
+/* This is main SCSS fail */
+@charset 'UTF-8';
+
+
+
+// Vendors
+@import
+'vendors/stylesheets/bootstrap',
+'vendors/bootstrap-datetimepicker-build';
+
+/*'vendors/reset',
+'vendors/initold';*/
+
+
+// Configuration and helpers
+@import
+'abstracts/variables',
+'abstracts/mixins',
+'abstracts/icons';
+
+// Base stuff
+@import
+'base/base';
+
+
+// Componets
+@import
+'components/formelements';
+
+// Componets
+/*@import
+'components/formelements',
+'components/table',
+'components/buttons',
+'components/hamburger';*/
+
+// Layout-related sections
+@import
+/*'layout/header',*/
+/*'layout/content',*/
+'layout/footer';
+
+// Page-specific styles
+@import
+'pages/trips';
+
+//Themes 
+@import 
+'themes/media';
