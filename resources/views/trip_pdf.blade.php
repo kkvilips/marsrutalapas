@@ -66,7 +66,7 @@
             Braucienā patērētā degviela
         </td>
         <th>
-            {!! $consumedFuel !!} L
+            {!! $consumedFuel!=''?$consumedFuel:'' !!} L
         </th>
     </tr>
     <tr>
@@ -74,7 +74,7 @@
             Atlikušais attālums
         </td>
         <th>
-            {!! $distanceToGo['distance'] !!}
+            {!! $distanceToGo!=''?$distanceToGo['distance']:'' !!}
         </th>
     </tr>
     <tr>
@@ -82,7 +82,7 @@
             Nobrauktais attālums
         </td>
         <th>
-            {!! $distanceDriven['distance'] !!}
+            {!! $distanceDriven!=''?$distanceDriven['distance']:'' !!}
         </th>
     </tr>
     <tr>
@@ -90,7 +90,7 @@
             Laiks līdz galamērķim
         </td>
         <th>
-            {!! $distanceDriven['time'] !!}
+            {!! $distanceDriven!=''?$distanceDriven['time']:'' !!}
         </th>
     </tr>
 </table>

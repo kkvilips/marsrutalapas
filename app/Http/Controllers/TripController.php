@@ -40,6 +40,7 @@ class TripController extends Controller
 
             'car_id' => 'required',
             'end_point' => 'required',
+
         ]);
 
         $gpsTrip              = new TrackerTrip();
@@ -229,7 +230,14 @@ class TripController extends Controller
                         $trip->start_point[0]==='9' ||
                         $trip->start_point[0]==='-')
                     {
-                        $geocode_start    = $geocoder->getAddressForCoordinates($start_coords[0], $start_coords[1]);
+                        if (isset($start_coords[1]))
+                        {
+                            $geocode_start    = $geocoder->getAddressForCoordinates($start_coords[0], $start_coords[1]);
+                        }
+                        else{
+                            $geocode_start = $trip->start_point;
+                        }
+
                     }
                     else{
                         $geocode_start = $trip->start_point;
@@ -246,7 +254,14 @@ class TripController extends Controller
                         $trip->end_point[0]==='9' ||
                         $trip->end_point[0]==='-')
                     {
-                        $geocode_end      = $geocoder->getAddressForCoordinates($end_coords[0], $end_coords[1]);
+                        if (isset($end_coords[1]))
+                        {
+                            $geocode_end      = $geocoder->getAddressForCoordinates($end_coords[0], $end_coords[1]);
+                        }
+                        else{
+                            $geocode_end = $trip->end_point;
+                        }
+
                     }
                     else{
                         $geocode_end = $trip->end_point;
@@ -278,7 +293,14 @@ class TripController extends Controller
                         $trip->start_point[0]==='9' ||
                         $trip->start_point[0]==='-')
                     {
-                        $geocode_start    = $geocoder->getAddressForCoordinates($start_coords[0], $start_coords[1]);
+                        if (isset($start_coords[1]))
+                        {
+                            $geocode_start    = $geocoder->getAddressForCoordinates($start_coords[0], $start_coords[1]);
+                        }
+                        else{
+                            $geocode_start = $trip->start_point;
+                        }
+
                     }
                     else{
                         $geocode_start = $trip->start_point;
@@ -295,7 +317,13 @@ class TripController extends Controller
                         $trip->end_point[0]==='9' ||
                         $trip->end_point[0]==='-')
                     {
-                        $geocode_end      = $geocoder->getAddressForCoordinates($end_coords[0], $end_coords[1]);
+                        if (isset($end_coords[1]))
+                        {
+                            $geocode_end      = $geocoder->getAddressForCoordinates($end_coords[0], $end_coords[1]);
+                        }
+                        else{
+                            $geocode_end = $trip->end_point;
+                        }
                     }
                     else{
                         $geocode_end = $trip->end_point;
@@ -372,7 +400,13 @@ class TripController extends Controller
                 $trip->start_point[0]==='9' ||
                 $trip->start_point[0]==='-')
             {
-                $geocode_start    = $geocoder->getAddressForCoordinates($start_coords[0], $start_coords[1]);
+                if (isset($start_coords[1]))
+                {
+                    $geocode_start    = $geocoder->getAddressForCoordinates($start_coords[0], $start_coords[1]);
+                }
+                else{
+                    $geocode_start = $trip->start_point;
+                }
             }
             else{
                 $geocode_start = $trip->start_point;
@@ -389,7 +423,13 @@ class TripController extends Controller
                 $trip->end_point[0]==='9' ||
                 $trip->end_point[0]==='-')
             {
-                $geocode_end      = $geocoder->getAddressForCoordinates($end_coords[0], $end_coords[1]);
+                if (isset($end_coords[1]))
+                {
+                    $geocode_end      = $geocoder->getAddressForCoordinates($end_coords[0], $end_coords[1]);
+                }
+                else{
+                    $geocode_end = $trip->end_point;
+                }
             }
             else{
                 $geocode_end = $trip->end_point;
@@ -420,7 +460,13 @@ class TripController extends Controller
                 $trip->start_point[0]==='9' ||
                 $trip->start_point[0]==='-')
             {
-                $geocode_start    = $geocoder->getAddressForCoordinates($start_coords[0], $start_coords[1]);
+                if (isset($start_coords[1]))
+                {
+                    $geocode_start    = $geocoder->getAddressForCoordinates($start_coords[0], $start_coords[1]);
+                }
+                else{
+                    $geocode_start = $trip->start_point;
+                }
             }
             else{
                 $geocode_start = $trip->start_point;
@@ -437,7 +483,13 @@ class TripController extends Controller
                 $trip->end_point[0]==='9' ||
                 $trip->end_point[0]==='-')
             {
-                $geocode_end      = $geocoder->getAddressForCoordinates($end_coords[0], $end_coords[1]);
+                if (isset($end_coords[1]))
+                {
+                    $geocode_end      = $geocoder->getAddressForCoordinates($end_coords[0], $end_coords[1]);
+                }
+                else{
+                    $geocode_end = $trip->end_point;
+                }
             }
             else{
                 $geocode_end = $trip->end_point;
@@ -448,23 +500,26 @@ class TripController extends Controller
                 ->put('geocode_endpoint', isset($geocode_end['formatted_address'])?$geocode_end['formatted_address']:$geocode_end)
                 ->put('time_passed', $timePassed);
         }
-
-        $distanceDriven = $this->GetDrivingDistance($tripWithGeocode['geocode_startpoint'], $tripWithGeocode['geocode_waypoint']);
-        $distanceToGo   = $this->GetDrivingDistance($tripWithGeocode['geocode_endpoint'], $tripWithGeocode['geocode_waypoint']);
-        if(isset($distanceDriven['distance']))
+        if ($trip->start_point!=null && $trip->end_point!=null && $trip->waypoint!=null)
         {
-            $distanceDrivenPieces = explode(' ',$distanceDriven['distance']);
-            $consumedFuel = (float)$distanceDrivenPieces[0]*((float)$car->consumption/100);
+            $distanceDriven = $this->GetDrivingDistance($tripWithGeocode['geocode_startpoint'], $tripWithGeocode['geocode_waypoint']);
+            $distanceToGo   = $this->GetDrivingDistance($tripWithGeocode['geocode_endpoint'], $tripWithGeocode['geocode_waypoint']);
+            if(isset($distanceDriven['distance']))
+            {
+                $distanceDrivenPieces = explode(' ',$distanceDriven['distance']);
+                $consumedFuel = (float)$distanceDrivenPieces[0]*((float)$car->consumption/100);
+            }
+            else{
+                $consumedFuel = '';
+            }
         }
-        else{
-            $consumedFuel = '';
-        }
+
 
         $pdf = PDF::loadView('trip_pdf', ['trip'=>$tripWithGeocode,
                                         'car'=>$car,
-                                        'distanceDriven'=>$distanceDriven,
-                                        'distanceToGo'=>$distanceToGo,
-                                        'consumedFuel'=>$consumedFuel]);
+                                        'distanceDriven'=>isset($distanceDriven)?$distanceDriven:'',
+                                        'distanceToGo'=>isset($distanceToGo)?$distanceToGo:'',
+                                        'consumedFuel'=>isset($consumedFuel)?$consumedFuel:'']);
         return $pdf->download('invoice'.$trip['id'].'_'.$trip['created_at'].'.pdf');
     }
 }
